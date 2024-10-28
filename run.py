@@ -68,5 +68,57 @@ def search_patient_in_sheet(name_str):
     if not found:
         # If no match is found, notify the user
         print("No records found with this name! Check the name and try again.\n")
-    
+        add_new_patient(name_str)
+
+def add_new_patient(name_str):
+    """
+    Prompts the user to confirm if patient is new and, if yes, to enter patient details.
+    Validates each input before adding to the sheet.
+    """  
+    response = input("Is this a new patient? (yes/no): ").strip().lower()
+    if response == 'yes':
+        print(f"Please enter the following details for: {name_str}:\n")
+
+
+        #Validates each entry befor storing it 
+        while True:
+            try:
+
+                #Age validation: Age must be an Integer
+                age = int(input("Enter age: ").strip())
+
+                # Temperature validation (it must be a float in the range of min_temp and max_temp defined above)
+                temperature = float(input("Enter temperature (°C): ").strip())
+                if temperature < min_temp or temperature > max_temp:
+                    print("Caution!!! Temperature is out of range.")
+
+                # Validate weight (must be a float)
+                weight = float(input("Enter weight (Kg): ").strip())
+
+                # Validate height (must be an integer)
+                height = int(input("Enter height (cm): ").strip())
+
+                # Calculate BMI
+                bmi = round(weight / (height / 100) ** 2, 2)
+                print(f"{name_str}'s BMI is: {bmi})
+
+                # Medical condition (must be a string, no special validation applied here)
+                medical_condition = input(f"Enter {name_str}'s existing medical condition: ").strip()
+                
+                confirm = input(f"Do you want to add {name_str} to the system? (yes/no): \n").strip().lower()
+                if confirm == 'yes':
+                    # Append new patient details to the worksheet
+                    PATIENTS_WORKSHEET.append_row([name_str, age, temperature, weight, height, medical_condition, bmi])
+                    print(f"\nPatient {name_str} added successfully!\n")
+                else:
+                    print("Patient details not saved.\n")
+                break
+
+            except ValueError as e:
+                print(f"Invalid input: {e}. Please enter the details again.\n")
+
+    elif response == 'no':
+        print("Check the spelling and order of names, then try again.\n")
+
+
 get_patients_data()
