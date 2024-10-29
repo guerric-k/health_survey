@@ -14,9 +14,10 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('health_survey')
 PATIENTS_WORKSHEET = SHEET.worksheet('patients')
 
-min_temp = 35.0
-max_temp = 40.0
+min_temp = 29.0
+max_temp = 38.0
 
+print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEM. \n")
 def get_patients_data():
     """
     Get patient name input from the user with validation.
@@ -64,18 +65,26 @@ def search_patient_in_sheet(name_str):
             
             found = True
             break
-
+    
     if not found:
         # If no match is found, notify the user
-        print("No records found with this name! Check the name and try again.\n")
-        add_new_patient(name_str)
+        print("\nNo records found with this name! Check the name and try again.\n")
+        reply = input(f"Would you like to Enter the name again or Add {name_str} as a new patient? (enter/add): ").strip().lower()
+        
+        if reply == 'enter':
+            get_patients_data()
+            
+        elif reply == 'add':
+            add_new_patient(name_str)
+        else:
+            print("Invalid input. Please enter 'enter' to search again or 'add' to add a new patient.\n")
 
 def add_new_patient(name_str):
     """
     Prompts the user to confirm if patient is new and, if yes, to enter patient details.
     Validates each input before adding to the sheet.
     """  
-    response = input("Is this a new patient? (yes/no): ").strip().lower()
+    response = input(f"Are you confirming {name_str} is a new patient? (yes/no): ").strip().lower()
     if response == 'yes':
         print(f"Please enter the following details for: {name_str}:\n")
 
@@ -100,7 +109,7 @@ def add_new_patient(name_str):
 
                 # Calculate BMI
                 bmi = round(weight / (height / 100) ** 2, 2)
-                print(f"{name_str}'s BMI is: {bmi})
+                print(f"{name_str}'s BMI is: {bmi}\n")
 
                 # Medical condition (must be a string, no special validation applied here)
                 medical_condition = input(f"Enter {name_str}'s existing medical condition: ").strip()
