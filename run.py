@@ -148,6 +148,7 @@ def add_new_patient(name_str):
                 if confirm == 'yes':
                     # Append new patient details to the worksheet
                     PATIENTS_WORKSHEET.append_row([name_str, age, temperature, weight, height, medical_condition, bmi])
+                    print("System updating...\n")
                     print(f"\nPatient {name_str} added successfully!\n")
                 else:
                     print("Patient details not saved.\n")
