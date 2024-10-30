@@ -34,7 +34,7 @@ def get_patients_data():
     while True:
         print("Please enter patient's Firstname and Surname.")
         print("Example: John Crawford \n")
-        name_str = input("Enter patient's name here: ").strip()
+        name_str = input("Enter patient's name here: \n").strip()
         
         # r"^[A-Z][a-z]+(?: [A-Z][a-z]+)+$ Regular expression to validate the name format
 
@@ -103,7 +103,7 @@ def add_new_patient(name_str):
                 #Age validation: Age must be an Integer and within range
                 # Age validation with retry loop
                 while True:
-                    age = int(input("Enter age: ").strip())
+                    age = int(input("Enter age: \n").strip())
                     if age < min_age:
                         raise ValueError(f"Age must be at least {min_age} years.")
                     break  # Break loop if age is valid
@@ -111,7 +111,7 @@ def add_new_patient(name_str):
                 # Temperature validation (it must be a float in the range of min_temp and max_temp defined above)
                 # Temperature validation
                 while True:
-                    temperature = float(input("Enter temperature (°C): ").strip())
+                    temperature = float(input("Enter temperature (°C): \n").strip())
                     if not (min_temp <= temperature <= max_temp):
                         print(f"Caution!!! Temperature is out of range ({min_temp} - {max_temp}°C).")
                     break  # Proceed regardless, as temperature can be recorded even if out of range
@@ -119,7 +119,7 @@ def add_new_patient(name_str):
                 # Weight validation: must be a float within min and max weight range
                 # Weight validation with retry loop
                 while True:
-                    weight = float(input("Enter weight (Kg): ").strip())
+                    weight = float(input("Enter weight (Kg): \n").strip())
                     if not (min_weight <= weight <= max_weight):
                         raise ValueError(f"Weight must be between {min_weight} and {max_weight} Kg.")
                     break  # Break loop if weight is valid
@@ -127,7 +127,7 @@ def add_new_patient(name_str):
                 # Height validation: must be an integer within min and max height range
                 # Height validation with retry loop
                 while True:
-                    height = int(input("Enter height (cm): ").strip())
+                    height = int(input("Enter height (cm): \n").strip())
                     if not (min_height <= height <= max_height):
                         raise ValueError(f"Height must be between {min_height} and {max_height} cm.")
                     break  # Break loop if height is valid
