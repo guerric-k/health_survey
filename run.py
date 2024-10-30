@@ -14,8 +14,15 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('health_survey')
 PATIENTS_WORKSHEET = SHEET.worksheet('patients')
 
-min_temp = 29.0
-max_temp = 38.0
+min_temp = 26.0 # minimum normal temperature in °C
+max_temp = 38.0 # maximum normal temperature in °C
+min_height = 61.0 # minimum height in cm
+max_height = 260.0 # maximum height in cm
+min_weight = 5.5 # minimum weight in kg
+max_weight = 700 # maximum weight in kg
+min_age = 15 # minimum age of participants in the health survey is 15 years
+max_age = 120 # maximum age of participants in the health survey is 120 years
+max_medical_condition_length = 200  # maximum character length for medical condition
 
 print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEM. \n")
 def get_patients_data():
@@ -68,7 +75,7 @@ def search_patient_in_sheet(name_str):
     
     if not found:
         # If no match is found, notify the user
-        print("\nNo records found with this name! Check the name and try again.\n")
+        print("\nNo records found with this name! Check and ensure that the name is correct.\n")
         reply = input(f"Would you like to Enter the name again or Add {name_str} as a new patient? (enter/add): ").strip().lower()
         
         if reply == 'enter':
@@ -93,26 +100,49 @@ def add_new_patient(name_str):
         while True:
             try:
 
-                #Age validation: Age must be an Integer
-                age = int(input("Enter age: ").strip())
+                #Age validation: Age must be an Integer and within range
+                # Age validation with retry loop
+                while True:
+                    age = int(input("Enter age: ").strip())
+                    if age < min_age:
+                        raise ValueError(f"Age must be at least {min_age} years.")
+                    break  # Break loop if age is valid
 
                 # Temperature validation (it must be a float in the range of min_temp and max_temp defined above)
-                temperature = float(input("Enter temperature (°C): ").strip())
-                if temperature < min_temp or temperature > max_temp:
-                    print("Caution!!! Temperature is out of range.")
+                # Temperature validation
+                while True:
+                    temperature = float(input("Enter temperature (°C): ").strip())
+                    if not (min_temp <= temperature <= max_temp):
+                        print(f"Caution!!! Temperature is out of range ({min_temp} - {max_temp}°C).")
+                    break  # Proceed regardless, as temperature can be recorded even if out of range
 
-                # Validate weight (must be a float)
-                weight = float(input("Enter weight (Kg): ").strip())
+                # Weight validation: must be a float within min and max weight range
+                # Weight validation with retry loop
+                while True:
+                    weight = float(input("Enter weight (Kg): ").strip())
+                    if not (min_weight <= weight <= max_weight):
+                        raise ValueError(f"Weight must be between {min_weight} and {max_weight} Kg.")
+                    break  # Break loop if weight is valid
 
-                # Validate height (must be an integer)
-                height = int(input("Enter height (cm): ").strip())
+                # Height validation: must be an integer within min and max height range
+                # Height validation with retry loop
+                while True:
+                    height = int(input("Enter height (cm): ").strip())
+                    if not (min_height <= height <= max_height):
+                        raise ValueError(f"Height must be between {min_height} and {max_height} cm.")
+                    break  # Break loop if height is valid
 
                 # Calculate BMI
                 bmi = round(weight / (height / 100) ** 2, 2)
                 print(f"{name_str}'s BMI is: {bmi}\n")
 
                 # Medical condition (must be a string, no special validation applied here)
-                medical_condition = input(f"Enter {name_str}'s existing medical condition: ").strip()
+                # Medical condition validation
+                while True:
+                    medical_condition = input(f"Enter {name_str}'s existing medical condition (max {max_medical_condition_length} characters): ").strip()
+                    if len(medical_condition) > max_medical_condition_length:
+                        raise ValueError(f"Medical condition should be less than {max_medical_condition_length} characters.")
+                    break  # Break loop if medical condition is valid
                 
                 confirm = input(f"Do you want to add {name_str} to the system? (yes/no): \n").strip().lower()
                 if confirm == 'yes':
