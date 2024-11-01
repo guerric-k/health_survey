@@ -1,6 +1,7 @@
 import re
 import gspread
 from google.oauth2.service_account import Credentials
+from datetime import datetime
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -24,7 +25,18 @@ min_age = 15 # minimum age of participants in the health survey is 15 years
 max_age = 120 # maximum age of participants in the health survey is 120 years
 max_medical_condition_length = 200  # maximum character length for medical condition
 
-print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEM. \n")
+def display_date_time():
+    """
+    Display the current version, date, and time in a readable format.
+    """
+    now = datetime.now()
+    formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
+    print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEMS \n")
+    print(f"==== Version 1.0: {formatted_time} ==== \n")
+  
+
+display_date_time()  
+
 def get_patients_data():
     """
     Get patient name input from the user with validation.
