@@ -31,9 +31,8 @@ def display_date_time():
     """
     now = datetime.now()
     formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEMS \n")
+    print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEM. \n")
     print(f"==== Version 1.0: {formatted_time} ==== \n")
-  
 
 display_date_time()  
 
@@ -58,7 +57,9 @@ def get_patients_data():
         else:
             print("Invalid input! Ensure each name starts with a capital letter, contains only letters, and has no special characters.")
             print("Please try again.\n")
+            print("----------------------------------------------\n")
 
+            
 def search_patient_in_sheet(name_str):
     """
     Searches for a patient by name in the 'patients' worksheet.
@@ -81,7 +82,7 @@ def search_patient_in_sheet(name_str):
             print(f"Height: {patient['height(cm)']} cm")
             print(f"Existing Medical Condition: {patient['existing medical condition']}")
             print(f"BMI: {patient['bmi']}\n")
-            
+            print("----------------------------------------------\n")
             found = True
             
             # Ask if user wants to update details
@@ -90,12 +91,13 @@ def search_patient_in_sheet(name_str):
                 add_new_patient(name_str, index)  # Pass row index to update the same row
             else:
                 print("No updates made to patient details.\n")
-            
+                print("----------------------------------------------\n")
             break
     
     if not found:
         # If no match is found, notify the user
         print("\nNo records found with this name! Check and ensure that the name is correct.\n")
+        print("----------------------------------------------\n")
         reply = input(f"Would you like to Enter the name again or Add {name_str} as a new patient? (enter/add): ").strip().lower()
         
         if reply == 'enter':
@@ -105,7 +107,7 @@ def search_patient_in_sheet(name_str):
             add_new_patient(name_str)
         else:
             print("Invalid input. Please enter 'enter' to search again or 'add' to add a new patient.\n")
-
+            print("----------------------------------------------\n")
 def add_new_patient(name_str, row=None):
     """
     Prompts the user to confirm if patient is new and, if yes, to enter patient details.
@@ -114,7 +116,7 @@ def add_new_patient(name_str, row=None):
     response = input(f"Are you confirming to add {name_str}'s details in the system? (yes/no): ").strip().lower()
     if response == 'yes':
         print(f"Please enter the following details for: {name_str}:\n")
-
+        print("----------------------------------------------\n")
 
         #Validates each entry befor storing it 
         while True:
@@ -170,15 +172,19 @@ def add_new_patient(name_str, row=None):
                     PATIENTS_WORKSHEET.append_row([name_str, age, temperature, weight, height, medical_condition, bmi])
                     print("System updating...\n")
                     print(f"\nPatient {name_str} added successfully!\n")
+                    print("----------------------------------------------\n")
                 else:
                     print("Patient details not saved.\n")
+                    print("----------------------------------------------\n")
                 break
 
             except ValueError as e:
                 print(f"Invalid input: {e}. Please enter the details again.\n")
+                print("----------------------------------------------\n")
 
     elif response == 'no':
         print("Check the spelling and order of names, then try again.\n")
+        print("----------------------------------------------\n")
 
 
 get_patients_data()
