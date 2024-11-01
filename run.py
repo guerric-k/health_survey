@@ -58,7 +58,7 @@ def search_patient_in_sheet(name_str):
     found = False
 
     # Iterate over each record to find a match by name
-    for patient in all_patients:
+    for index, patient in enumerate(all_patients, start=2):  # Start at 2 to account for header row
         if patient['name'] == name_str:  
             # Print the patient details
             print("\nPatient details found:")
@@ -71,6 +71,14 @@ def search_patient_in_sheet(name_str):
             print(f"BMI: {patient['bmi']}\n")
             
             found = True
+            
+            # Ask if user wants to update details
+            update = input(f"Do you wish to update the {name_str}t's details? (yes/no): ").strip().lower()
+            if update == 'yes':
+                add_new_patient(name_str, index)  # Pass row index to update the same row
+            else:
+                print("No updates made to patient details.\n")
+            
             break
     
     if not found:
@@ -86,12 +94,12 @@ def search_patient_in_sheet(name_str):
         else:
             print("Invalid input. Please enter 'enter' to search again or 'add' to add a new patient.\n")
 
-def add_new_patient(name_str):
+def add_new_patient(name_str, row=None):
     """
     Prompts the user to confirm if patient is new and, if yes, to enter patient details.
     Validates each input before adding to the sheet.
     """  
-    response = input(f"Are you confirming {name_str} is a new patient? (yes/no): ").strip().lower()
+    response = input(f"Are you confirming to add {name_str}'s details in the system? (yes/no): ").strip().lower()
     if response == 'yes':
         print(f"Please enter the following details for: {name_str}:\n")
 
@@ -144,7 +152,7 @@ def add_new_patient(name_str):
                         raise ValueError(f"Medical condition should be less than {max_medical_condition_length} characters.")
                     break  # Break loop if medical condition is valid
                 
-                confirm = input(f"Do you want to add {name_str} to the system? (yes/no): \n").strip().lower()
+                confirm = input(f"Do you confirm to add {name_str} to the system? (yes/no): \n").strip().lower()
                 if confirm == 'yes':
                     # Append new patient details to the worksheet
                     PATIENTS_WORKSHEET.append_row([name_str, age, temperature, weight, height, medical_condition, bmi])
