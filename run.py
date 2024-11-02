@@ -15,6 +15,12 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('health_survey')
 PATIENTS_WORKSHEET = SHEET.worksheet('patients')
 
+# ANSI escape codes coloring text
+RED = "\033[91m"
+ORANGE = "\033[38;5;208m"
+BLUE = "\033[94m"
+RESET = "\033[0m"  # Reset to default color
+
 min_temp = 33.2  # minimum normal temperature in °C
 max_temp = 38.2  # maximum normal temperature in °C
 min_height = 54.6  # minimum height in cm
@@ -26,10 +32,6 @@ max_age = 100  # maximum age of participants
 # maximum character length for medical condition
 max_medical_condition_length = 200
 
-# ANSI escape codes for red text
-RED = "\033[91m"
-RESET = "\033[0m"  # Reset to default color
-
 
 def display_date_time():
     """
@@ -37,8 +39,13 @@ def display_date_time():
     """
     now = datetime.now()
     formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEMS \n")
-    print(f"==== Version 1.0: {formatted_time} ==== \n")
+    print("\n===========================================")
+    print("WELCOME TO HEALTH SURVEY AUTOMATED SYSTEMS")
+    print("===========================================")
+    print(
+        f"==== {ORANGE}Version 1.0: {RESET}"
+        F"{BLUE}{formatted_time} ==== {RESET}\n"
+    )
 
 
 display_date_time()
@@ -90,6 +97,7 @@ def search_patient_in_sheet(name_str):
     # Start at 2 to account for header row
     for index, patient in enumerate(all_patients, start=2):
         if patient['name'] == name_str:
+
             # Print the patient details
             print("\nPatient details found:")
             print(f"Name: {patient['name']}")
@@ -222,7 +230,7 @@ def add_new_patient(name_str, row=None):
 
                 confirm = input(
                     f"Do you confirm to add {name_str} to the system? "
-                    "(yes/no): \n"
+                    f"(yes/no): \n"
                 ).strip().lower()
 
                 if confirm == 'yes':
