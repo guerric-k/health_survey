@@ -58,8 +58,7 @@ def get_patients_data():
             print("Invalid input! Ensure each name starts with a capital letter, contains only letters, and has no special characters.")
             print("Please try again.\n")
             print("----------------------------------------------\n")
-
-            
+          
 def search_patient_in_sheet(name_str):
     """
     Searches for a patient by name in the 'patients' worksheet.
@@ -108,6 +107,7 @@ def search_patient_in_sheet(name_str):
         else:
             print("Invalid input. Please enter 'enter' to search again or 'add' to add a new patient.\n")
             print("----------------------------------------------\n")
+
 def add_new_patient(name_str, row=None):
     """
     Prompts the user to confirm if patient is new and, if yes, to enter patient details.
